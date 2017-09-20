@@ -2,38 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class NeuralNetwork {
 
 	// Options
-	private int[] network = new int[] {1,{1},1};
+	private int[] network;
 	private int population = 50;
-	private float elitsm = 0.2;
-	private float randomBehaviour = 0.2;
-	private float mutationRate = 0.1;
-	private float mutationRange = 0.5;
+	private double elitsm = 0.2;
+	private double randomBehaviour = 0.2;
+	private double mutationRate = 0.1;
+	private double mutationRange = 0.5;
 	private int scoreSort = -1;
 	private int nbChild = 1;
 
-	// Network
-	Layer layers = new Layer[]{};
+	static System.Random rnd = new System.Random ();
 
+	// Network
+	private List<Layer> layers = new List<Layer>();
+
+
+	public NeuralNetwork(){
+		network = new int[]{ 1, 1, 1 };
+	}
 
 	private double activation(double x) {
 		return (1 / (Math.Exp(x) + 1));
 	}
 
 	private static double randomClamped() {
-		return new System.Random ().NextDouble () * 2 - 1;
+		return rnd.NextDouble () * 2 - 1;
 	}
 
-	public NeuralNetwork(){
-
-		//Debug.Log(activation(rnd.Next(1,1000)));
-		Debug.Log("Random Clamped: " + this.randomClamped());
-	}
-
-	private void perceptronGeneration(int input, int hiddens, int output) {
+	public void perceptronGeneration(int input, int[] hiddens, int output) {
 		int index = 0;
 		int previousNeurons = 0;
 		Layer layer = new Layer ();
@@ -42,53 +43,96 @@ public class NeuralNetwork {
 
 		previousNeurons = input;
 
-		layers [index] = layer;
+		layers.Add (layer);
 		index++;
 
-		for (int i = 0; i < hiddens; i++) {
+		for (int i = 0; i < hiddens.Length; i++) {
 			Layer nextLayer = new Layer(index);
 
 			nextLayer.populate (hiddens [i], previousNeurons);
 			previousNeurons = hiddens [i];
-			layers [index] = nextLayer;
+			layers.Add (nextLayer);
 			index++;
 		}
 
 		// Output layer
-
 		Layer outputLayer = new Layer (index);
 		outputLayer.populate (output, previousNeurons);
 
-		layers [index] = outputLayer;
+		layers.Add(outputLayer);
 
 	}
 
-	private class Neuron {
+	private int[] getNumberOfNeuronsPerLayer() {
+		int[] nbNeuronsPerLayer = new int[layers.Count];
+
+		for (int i = 0; i < layers.Count; i++) {
+			Layer layer = layers [i];
+			nbNeuronsPerLayer [i] = layer.getNeurons ().Length;
+		}
+
+		return nbNeuronsPerLayer;
+	}
+
+	public double[][][] getWeights() {
+
+		double[][][] weights = new double[][][]{};
+
+		for (int i = 0; i < layers.Count; i++) {
+			Layer layer = layers [i];
+			Neuron[] layerNeurons = layer.getNeurons();
+			for (int j = 0; j < layerNeurons.Length; j++) {
+				weights [i] [j] = layerNeurons [j].getWeights ();
+			}
+		}
+
+		return weights;
+	}
+
+	public List<Layer> getLayers() {
+		return layers;
+	}
+		
+	public class Neuron {
 		private int value = 0;
-		private int[] weights = new int[]{ };
+		private double[] weights;
 
 		public void populate(int nb){
+			weights = new double[nb];
 			for (int i = 0; i < nb; i++) {
 				weights [i] = NeuralNetwork.randomClamped ();
 			}
 		}
+
+		public double[] getWeights() {
+			return weights;
+		}
+
 	}
 
-	private class Layer {
+	public class Layer {
 		private int id;
 		private Neuron[] neurons = new Neuron[] {};
 
+		public Layer() {
+			id = 0;
+		}
+
 		public Layer(int index) {
-			id = index || 0;
+			id = index;
 		}
 
 		public void populate(int nbNeurons, int nbInputs) {
-			neurons = new Neuron[]{};
+			neurons = new Neuron[nbNeurons];
 			for (int i = 0; i < nbNeurons; i++) {
 				Neuron n = new Neuron ();
 				n.populate (nbInputs);
 				this.neurons [i] = n;
 			}
+		}
+
+		public Neuron[] getNeurons() {
+			return neurons;
 		}
 	}
 

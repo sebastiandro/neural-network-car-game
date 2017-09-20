@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CarRayCaster : MonoBehaviour
 {
@@ -12,6 +13,20 @@ public class CarRayCaster : MonoBehaviour
 		Debug.Log ("Start");
 
 		NeuralNetwork neu = new NeuralNetwork ();
+		neu.perceptronGeneration (5, new int[]{4, 3, 6}, 5);
+		List<NeuralNetwork.Layer> layers = neu.getLayers ();
+
+		for (int i = 0; i < layers.Count; i++) {
+			NeuralNetwork.Neuron[] layerNeurons = layers [i].getNeurons ();
+			for (int j = 0; j < layerNeurons.Length; j++) {
+				NeuralNetwork.Neuron neuron = layerNeurons[j];
+
+				double[] weights = neuron.getWeights ();
+				for (int k = 0; k < weights.Length; k++) {
+					print ("Layer " + i + " Neuron " + j + " Weight " + k +  ": " + weights [k]);
+				}
+			}
+		}
 	}
 
 	void Update(){
