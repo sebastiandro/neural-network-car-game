@@ -8,6 +8,7 @@ public class Genome
 
 	public Genome (NeuralNetwork neuralNetwork)
 	{
+		this.neuralNetwork = neuralNetwork;
 	}
 
 	public Genome (NeuralNetwork neuralNetwork, int score)

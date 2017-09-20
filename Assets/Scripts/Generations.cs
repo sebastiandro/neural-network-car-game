@@ -17,7 +17,7 @@ public class Generations
 		for (var i = 0; i < NeuroEvolution.population; i++) {
 			var nn = new NeuralNetwork ();
 
-			nn.perceptronGeneration (NeuroEvolution.inputNeurons, NeuroEvolution.hiddenLayers, NeuroEvolution.outputNeurons);
+			nn.perceptronGeneration (NeuroEvolution.inputs, NeuroEvolution.hiddenLayers, NeuroEvolution.outputs);
 
 			firstGeneration.addGenome (new Genome (nn));
 

@@ -6,16 +6,22 @@ public class CarRayCaster : MonoBehaviour
 {
 
 	public GameObject car;
+	public Rigidbody carRigid;
 	int rayDistance = 5;
 	int rayDistanceFront = 20;
 	NeuralNetwork neu = new NeuralNetwork ();
+	Genome currentGenome;
 
 	void Start() {
 		Debug.Log ("Start");
 
-		//NeuralNetwork neu = new NeuralNetwork ();
-		neu.perceptronGeneration (3, new int[]{4, 3, 6}, 5);
-		List<Layer> layers = neu.getLayers ();
+		NeuroEvolution neuro = new NeuroEvolution (4, new int[]{ 5, 10 }, 4);
+
+		Generation gen = neuro.nextGeneration ();
+
+		List<Genome> genomes = gen.getGenomes ();
+
+		currentGenome = genomes[0];
 
 		/*
 		for (int i = 0; i < layers.Count; i++) {
@@ -30,11 +36,6 @@ public class CarRayCaster : MonoBehaviour
 			}
 		}
 		*/
-
-		List<double> weights = neu.getWeightsList ();
-		for (int j = 0; j < weights.Count; j++) {
-			print (weights [j]);
-		}
 
 	}
 
@@ -78,13 +79,18 @@ public class CarRayCaster : MonoBehaviour
 			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, -45, 0) * transform.forward * rayDistance, Color.green);
 		}
 
-		print ("Left distance: " + leftDistance + " Front Distance: " + frontDistance + " Right Distance: " + rightDistance);
+		//print ("Left distance: " + leftDistance + " Front Distance: " + frontDistance + " Right Distance: " + rightDistance);
 
-		double[] output = neu.compute (new double[]{ leftDistance, frontDistance, rightDistance });
+		double currentSpeed = MathHelpers.limitToRange ((carRigid.velocity.magnitude * 3.6) / 70, 0, 1);
+		double[] output = currentGenome.getNeuralNetwork().compute (new double[]{ leftDistance, frontDistance, rightDistance, currentSpeed});
 
+
+		Debug.Log ("Output 1: " + output[0] + " Output 2: " + output[1] + " Output 3: " + output[2] + " Output 4:" + output[3] );
+
+		/*
 		for (int i = 0; i < output.Length; i++) {
-			Debug.Log ("Output " + i + ": " + output[i]);
-		}
+			//Debug.Log ("Output " + i + ": " + output[i]);
+		}*/
 
 	}
 

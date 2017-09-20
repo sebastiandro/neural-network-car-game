@@ -4,21 +4,22 @@ using System.Collections.Generic;
 public class NeuroEvolution
 {
 
-	public static int population = 50;
-	public static int inputNeurons = 1;
+	public static int population = 10;
+	public static int inputs = 1;
 	public static int[] hiddenLayers = new int[]{1};
-	public static int outputNeurons = 1;
+	public static int outputs = 1;
 	public bool lowHistoric = false;
 	public int historic = 0;
 
 
 	Generations generations = new Generations();
 
-	public NeuroEvolution ()
+	public NeuroEvolution (int inputs, int[] hiddenLayers, int outputs)
 	{
-		
+		NeuroEvolution.inputs = inputs;
+		NeuroEvolution.hiddenLayers = hiddenLayers;
+		NeuroEvolution.outputs = outputs;
 	}
-
 
 	public Generation nextGeneration() {
 
@@ -32,7 +33,7 @@ public class NeuroEvolution
 
 		if (lowHistoric) {
 			if (generations.getGenerations ().Count >= 2) {
-				List<Genome> genomes = generations.getGenerations () [generations.getGenerations () - 1].getGenomes ();
+				List<Genome> genomes = generations.getGenerations () [generations.getGenerations ().Count - 1].getGenomes ();
 				for (int i = 0; i < genomes.Count; i++) {
 					genomes [i].deleteNeuralNetwork ();
 				}

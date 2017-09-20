@@ -19,5 +19,15 @@ public class MathHelpers
 		return rnd.NextDouble ();
 	}
 
+	public static double limitToRange(double input, int min, int max) {
+		if (input < min)
+			return (double)min;		
+		if (input > max) {
+			return (double)max;
+		}
+
+		return input;
+	}
+
 }
 
