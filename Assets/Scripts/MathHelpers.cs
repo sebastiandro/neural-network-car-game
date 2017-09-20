@@ -15,5 +15,9 @@ public class MathHelpers
 		return rnd.NextDouble () * 2 - 1;
 	}
 
+	public static double randomNumber() {
+		return rnd.NextDouble ();
+	}
+
 }
 

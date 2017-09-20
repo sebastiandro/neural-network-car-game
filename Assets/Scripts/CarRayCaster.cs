@@ -31,6 +31,11 @@ public class CarRayCaster : MonoBehaviour
 		}
 		*/
 
+		List<double> weights = neu.getWeightsList ();
+		for (int j = 0; j < weights.Count; j++) {
+			print (weights [j]);
+		}
+
 	}
 
 	void Update(){

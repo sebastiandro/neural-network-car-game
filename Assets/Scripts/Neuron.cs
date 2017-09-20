@@ -20,6 +20,10 @@ public class Neuron {
 		this.weights = weights;
 	}
 
+	public void setWeightAtIndex(double weight, int index) {
+		weights [index] = weight;
+	}
+
 	public void setValue(double value) {
 		this.value = value;
 	}

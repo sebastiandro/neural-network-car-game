@@ -45,7 +45,7 @@ public class NeuralNetwork {
 
 	}
 
-	private int[] getNumberOfNeuronsPerLayer() {
+	public int[] getNumberOfNeuronsPerLayer() {
 		int[] nbNeuronsPerLayer = new int[layers.Count];
 
 		for (int i = 0; i < layers.Count; i++) {
@@ -56,22 +56,26 @@ public class NeuralNetwork {
 		return nbNeuronsPerLayer;
 	}
 
-	public double[][][] getWeights() {
+	public List<double> getWeightsList() {
 
-		double[][][] weights = new double[][][]{};
+		List<double> weights = new List<double>();
 
 		for (int i = 0; i < layers.Count; i++) {
 			Layer layer = layers [i];
 			Neuron[] layerNeurons = layer.getNeurons();
 			for (int j = 0; j < layerNeurons.Length; j++) {
-				weights [i] [j] = layerNeurons [j].getWeights ();
+				double[] neuronWeights = layerNeurons [j].getWeights ();
+				for (int k = 0; k < neuronWeights.Length; k++) {
+					weights.Add (neuronWeights [k]);
+				}
 			}
 		}
 
 		return weights;
 	}
 
-	public void setNeuronsAndWeights(int[] nbNeuronsPerLayer, double[][] weights){
+
+	public void setNeuronsAndWeights(int[] nbNeuronsPerLayer, List<double> weights){
 		int previousNeurons = 0;
 		int index = 0;
 		int indexWeights = 0;
@@ -84,7 +88,10 @@ public class NeuralNetwork {
 			Neuron[] neurons = layer.getNeurons ();
 
 			for (int j = 0; j < neurons.Length; j++) {
-				neurons [j].setWeights (weights [indexWeights]);
+				for (int k = 0; k < neurons [j].getWeights ().Length; k++) {
+					neurons [j].setWeightAtIndex (weights [indexWeights], indexWeights);
+					indexWeights++;
+				}
 			}
 
 			previousNeurons = nbNeuronsPerLayer [i];
