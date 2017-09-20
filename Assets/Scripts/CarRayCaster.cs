@@ -15,7 +15,7 @@ public class CarRayCaster : MonoBehaviour
 
 		//NeuralNetwork neu = new NeuralNetwork ();
 		neu.perceptronGeneration (3, new int[]{4, 3, 6}, 5);
-		List<NeuralNetwork.Layer> layers = neu.getLayers ();
+		List<Layer> layers = neu.getLayers ();
 
 		/*
 		for (int i = 0; i < layers.Count; i++) {

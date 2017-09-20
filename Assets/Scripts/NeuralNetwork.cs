@@ -8,17 +8,6 @@ public class NeuralNetwork {
 
 	// Options
 	private int[] network;
-	private int population = 50;
-	private double elitsm = 0.2;
-	private double randomBehaviour = 0.2;
-	private double mutationRate = 0.1;
-	private double mutationRange = 0.5;
-	private int scoreSort = -1;
-	private int nbChild = 1;
-
-	static System.Random rnd = new System.Random ();
-
-	// Network
 	private List<Layer> layers = new List<Layer>();
 
 
@@ -26,13 +15,6 @@ public class NeuralNetwork {
 		network = new int[]{ 1, 1, 1 };
 	}
 
-	private double activation(double x) {
-		return (1 / (Math.Exp(x) + 1));
-	}
-
-	private static double randomClamped() {
-		return rnd.NextDouble () * 2 - 1;
-	}
 
 	public void perceptronGeneration(int input, int[] hiddens, int output) {
 		int index = 0;
@@ -133,7 +115,7 @@ public class NeuralNetwork {
 					sum += prevLayer.getNeurons () [l].getValue () * layerNeurons [k].getWeights () [l];
 				}
 
-				layerNeurons [k].setValue (activation (sum));
+				layerNeurons [k].setValue (MathHelpers.activation (sum));
 			}
 
 			prevLayer = this.layers [j];
@@ -150,67 +132,32 @@ public class NeuralNetwork {
 
 	}
 
+	public void setNetwork(int[] network) {
+		this.network = network;
+	}
+
+	public void setLayers (List<Layer> layers) {
+		this.layers = layers;
+	}
+
 	public List<Layer> getLayers() {
 		return layers;
 	}
+
+	public NeuralNetwork Clone(){
+		NeuralNetwork newNeuralNetwork = new NeuralNetwork ();
+
+		int[] newNetwork = network;
+		List<Layer> newLayers = new List<Layer>();
+
+		newLayers.ForEach ((layer) => {
+			newLayers.Add(layer.Clone());	
+		});
+
+		newNeuralNetwork.setNetwork (newNetwork);
+		newNeuralNetwork.setLayers (newLayers);
+
+		return newNeuralNetwork;
+	}
 		
-	public class Neuron {
-		private double value = 0;
-		private double[] weights;
-
-		public void populate(int nb){
-			weights = new double[nb];
-			for (int i = 0; i < nb; i++) {
-				weights [i] = NeuralNetwork.randomClamped ();
-			}
-		}
-
-		public double[] getWeights() {
-			return weights;
-		}
-
-		public void setWeights(double[] weights) {
-			this.weights = weights;
-		}
-
-		public void setValue(double value) {
-			this.value = value;
-		}
-
-		public double getValue() {
-			return value;
-		}
-
-	}
-
-	public class Layer {
-		private int id;
-		private Neuron[] neurons = new Neuron[] {};
-
-		public Layer() {
-			id = 0;
-		}
-
-		public Layer(int index) {
-			id = index;
-		}
-
-		public void populate(int nbNeurons, int nbInputs) {
-			neurons = new Neuron[nbNeurons];
-			for (int i = 0; i < nbNeurons; i++) {
-				Neuron n = new Neuron ();
-				n.populate (nbInputs);
-				this.neurons [i] = n;
-			}
-		}
-
-		public Neuron[] getNeurons() {
-			return neurons;
-		}
-	}
-
-
-
-
-
 }
