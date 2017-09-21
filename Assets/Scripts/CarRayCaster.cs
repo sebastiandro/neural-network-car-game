@@ -12,7 +12,7 @@ public class CarRayCaster : MonoBehaviour
 
 	public Rigidbody carRigid;
 	int rayDistance = 5;
-	int rayDistanceFront = 20;
+	int rayDistanceFront = 40;
 	NeuralNetwork neu = new NeuralNetwork ();
 	NeuroEvolution neuro;
 	Genome currentGenome;
@@ -30,7 +30,7 @@ public class CarRayCaster : MonoBehaviour
 	void Awake() {
 		Debug.Log ("Awake");
 
-		neuro = new NeuroEvolution (4, new int[]{ 5, 10 }, 3);
+		neuro = new NeuroEvolution (3, new int[]{ 5 }, 2);
 
 		Generation gen = neuro.nextGeneration ();
 
@@ -92,10 +92,6 @@ public class CarRayCaster : MonoBehaviour
 			currentGeneration = neuro.nextGeneration ();
 			currentGenomes = currentGeneration.getGenomes ();
 
-			currentGenomes.ForEach (((Genome obj) => {
-				Debug.Log(obj.getNeuralNetwork().getLayers().Count);
-			}));
-
 			currentGenomeIndex = 0;
 
 			generationNumber++;
@@ -149,11 +145,11 @@ public class CarRayCaster : MonoBehaviour
 		} else {
 			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, -45, 0) * transform.forward * rayDistance, Color.green);
 		}
+			
 
-		//print ("Left distance: " + leftDistance + " Front Distance: " + frontDistance + " Right Distance: " + rightDistance);
-
-		double currentSpeed = MathHelpers.limitToRange ((carRigid.velocity.magnitude * 3.6) / 70, 0, 1);
-		double[] output = currentGenome.getNeuralNetwork().compute (new double[]{ leftDistance, frontDistance, rightDistance, currentSpeed});
+		double currentSpeed = MathHelpers.limitToRange ((carRigid.velocity.magnitude * 3.6) / 15, 0, 1);
+		//print ("Left distance: " + leftDistance + " Front Distance: " + frontDistance + " Right Distance: " + rightDistance + " Speed: " + currentSpeed);
+		double[] output = currentGenome.getNeuralNetwork().compute (new double[]{ leftDistance, frontDistance, rightDistance});
 
 
 		//Debug.Log ("Output 1: " + output[0] + " Output 2: " + output[1] + " Output 3: " + output[2] + " Output 4:" + output[3] );
@@ -164,10 +160,9 @@ public class CarRayCaster : MonoBehaviour
 		}*/
 
 		int output1 = output [0] > 0.5 ? 1 : 0; // speed
-		int output2 = output [1] > 0.5 ? 1 : 0; // left steer
-		int output3 = output [2] > 0.5 ? 1 : 0; // right steer
+		int output2 = output [1] > 0.5 ? 1 : 0; // steer
 
-		//Debug.Log ("Output 1: " + output[0] + " Output2: " + output[1] + " Output 3: " + output[2]);
+		Debug.Log ("Output 1: " + output[0] + " Output2: " + output[1]);
 
 
 		//Debug.Log ();
@@ -176,9 +171,10 @@ public class CarRayCaster : MonoBehaviour
 
 		//Debug.Log (h);
 
-		m_Car.Move ((float)(output[1] - output[2]), (float)output[0], (float)output[0], 0);
-
-		//Debug .Log(m_Car.CurrentSteerAngle);
+		m_Car.Move ((float)(output[1] * 2 - 1), (float)output[0], (float)output[0], 0);
+	
+		Debug.Log ((float)(output[1] * 2 - 1));
+		Debug .Log(m_Car.CurrentSteerAngle);
 	}
 
 }

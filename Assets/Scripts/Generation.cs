@@ -8,7 +8,7 @@ public class Generation {
 	List<Genome> genomes = new List<Genome>();
 
 	private double mutationRange = 0.5;
-	private double mutationRate = 0.1;
+	private double mutationRate = 0.02;
 	private double elitism = 0.2;
 	private double randomBehaviour = 0.2;
 	private int nbChildren = 1;
@@ -33,6 +33,24 @@ public class Generation {
 		return genomes;
 	}
 
+	public List<Genome> getGenomesOrderdByScore() {
+
+		List<Genome> orderedGenomes = new List<Genome> (genomes);
+
+		orderedGenomes.Sort ((x, y) => {
+			return x.getScore().CompareTo(y.getScore());
+		});
+
+		orderedGenomes.Reverse ();
+
+		Debug.Log ("Ordered Genomes");
+		orderedGenomes.ForEach((Genome genome) => {
+			Debug.Log(genome.getScore());
+		});
+
+		return orderedGenomes;
+	}
+
 	public Genome[] breed(Genome g1, Genome g2, int nbChildren){
 
 		Genome[] children = new Genome[nbChildren];
@@ -42,9 +60,6 @@ public class Generation {
 			Genome g1Clone = g1.Clone();
 			List<double> g1Weights = g1Clone.getNeuralNetwork ().getWeightsList ();
 			List<double> g2Weights = g2.getNeuralNetwork ().getWeightsList ();
-
-			Debug.Log ("g1: " + g1Weights.Count);
-			Debug.Log ("g2: " + g2Weights.Count);
 
 			// Genetic Crossover
 			for (int j = 0; j < g2Weights.Count; j++) {
@@ -75,7 +90,7 @@ public class Generation {
 		// Elitism decides the individuals that will stay alive
 		for (int i = 0; i < Math.Round(elitism * NeuroEvolution.population); i++) {
 			if (nextGeneration.getGenomes ().Count < NeuroEvolution.population) {
-				nextGeneration.addGenome (this.getGenomes () [i].Clone());
+				nextGeneration.addGenome (this.getGenomesOrderdByScore () [i].Clone());
 			}
 		}
 
@@ -90,8 +105,6 @@ public class Generation {
 			}
 				
 			genomeNetwork.setNeuronsAndWeights (genomeNetwork.getNumberOfNeuronsPerLayer (), randomWeights);
-
-			Debug.Log ("From random:" +  genomeNetwork.getLayers ().Count);
 
 			if (nextGeneration.getGenomes ().Count < NeuroEvolution.population) {
 				nextGeneration.getGenomes ().Add (randomGenome);
