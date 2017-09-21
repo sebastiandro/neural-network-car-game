@@ -128,6 +128,7 @@ namespace UnityStandardAssets.Vehicles.Car
 
         public void Move(float steering, float accel, float footbrake, float handbrake)
         {
+
             for (int i = 0; i < 4; i++)
             {
                 Quaternion quat;
@@ -207,8 +208,8 @@ namespace UnityStandardAssets.Vehicles.Car
                     }
                     break;
 
-                case CarDriveType.FrontWheelDrive:
-                    thrustTorque = accel * (m_CurrentTorque / 2f);
+			case CarDriveType.FrontWheelDrive:
+				thrustTorque = accel * (m_CurrentTorque / 2f);
                     m_WheelColliders[0].motorTorque = m_WheelColliders[1].motorTorque = thrustTorque;
                     break;
 

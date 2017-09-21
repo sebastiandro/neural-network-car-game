@@ -201,7 +201,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af519f63585e60b468e8fe59ad1cca06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrainid: 976275476
 --- !u!65 &13124723
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -226,6 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   restartScene: 0
+  carObject: {fileID: 1459406304}
 --- !u!1 &42640415
 GameObject:
   m_ObjectHideFlags: 0
@@ -1296,6 +1296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   restartScene: 0
+  carObject: {fileID: 0}
 --- !u!1001 &769760130
 Prefab:
   m_ObjectHideFlags: 0
@@ -1625,7 +1626,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400050, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 7.96
+      value: 1.04
       objectReference: {fileID: 0}
     - target: {fileID: 400050, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1701,6 +1702,10 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 8200016, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
       propertyPath: reverbZoneMixCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
+      propertyPath: m_CarDriveType
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2138,9 +2143,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   car: {fileID: 1459406304}
+  carRigid: {fileID: 1459406310}
+  m_Car: {fileID: 1459406308}
+--- !u!114 &1459406308 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11400002, guid: 0e7ee4df08df88c4880f43398f9ad2c2,
+    type: 2}
+  m_PrefabInternal: {fileID: 1062185462}
+  m_Script: {fileID: 11500000, guid: 3ea65b38d485c374caa584a03f1de571, type: 3}
 --- !u!4 &1459406309 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400050, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
+  m_PrefabInternal: {fileID: 1062185462}
+--- !u!54 &1459406310 stripped
+Rigidbody:
+  m_PrefabParentObject: {fileID: 5400000, guid: 0e7ee4df08df88c4880f43398f9ad2c2,
+    type: 2}
   m_PrefabInternal: {fileID: 1062185462}
 --- !u!1 &1464609787
 GameObject:

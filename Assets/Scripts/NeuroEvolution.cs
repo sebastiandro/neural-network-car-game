@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class NeuroEvolution
 {
 
-	public static int population = 10;
+	public static int population = 3;
 	public static int inputs = 1;
 	public static int[] hiddenLayers = new int[]{1};
 	public static int outputs = 1;

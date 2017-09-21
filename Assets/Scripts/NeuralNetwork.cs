@@ -88,19 +88,22 @@ public class NeuralNetwork {
 			Neuron[] neurons = layer.getNeurons ();
 
 			for (int j = 0; j < neurons.Length; j++) {
+
 				for (int k = 0; k < neurons [j].getWeights ().Length; k++) {
-					neurons [j].setWeightAtIndex (weights [indexWeights], indexWeights);
+					neurons [j].setWeightAtIndex (weights [indexWeights], k);
 					indexWeights++;
 				}
 			}
 
 			previousNeurons = nbNeuronsPerLayer [i];
+
+			layers.Add (layer);
 		}
 
+		this.layers = layers;
 	}
 
 	public double[] compute(double[] inputs){
-
 		Layer inputLayer = this.layers[0];
 		Neuron[] inputLayerNeurons = inputLayer.getNeurons ();
 
@@ -155,11 +158,7 @@ public class NeuralNetwork {
 		NeuralNetwork newNeuralNetwork = new NeuralNetwork ();
 
 		int[] newNetwork = network;
-		List<Layer> newLayers = new List<Layer>();
-
-		newLayers.ForEach ((layer) => {
-			newLayers.Add(layer.Clone());	
-		});
+		List<Layer> newLayers = new List<Layer>(layers);
 
 		newNeuralNetwork.setNetwork (newNetwork);
 		newNeuralNetwork.setLayers (newLayers);

@@ -43,6 +43,7 @@ public class Neuron {
 		newNeuron.setValue (newValue);
 		newNeuron.setWeights (newWeights);
 
+
 		return newNeuron;
 	}
 

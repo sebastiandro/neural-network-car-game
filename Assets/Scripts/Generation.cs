@@ -10,7 +10,6 @@ public class Generation {
 	private double mutationRange = 0.5;
 	private double mutationRate = 0.1;
 	private double elitism = 0.2;
-	private double population = 10;
 	private double randomBehaviour = 0.2;
 	private int nbChildren = 1;
 
@@ -44,6 +43,9 @@ public class Generation {
 			List<double> g1Weights = g1Clone.getNeuralNetwork ().getWeightsList ();
 			List<double> g2Weights = g2.getNeuralNetwork ().getWeightsList ();
 
+			Debug.Log ("g1: " + g1Weights.Count);
+			Debug.Log ("g2: " + g2Weights.Count);
+
 			// Genetic Crossover
 			for (int j = 0; j < g2Weights.Count; j++) {
 				
@@ -71,25 +73,27 @@ public class Generation {
 		Generation nextGeneration = new Generation ();
 
 		// Elitism decides the individuals that will stay alive
-		for (int i = 0; i < Math.Round(elitism * population); i++) {
-			if (nextGeneration.getGenomes ().Count < population) {
+		for (int i = 0; i < Math.Round(elitism * NeuroEvolution.population); i++) {
+			if (nextGeneration.getGenomes ().Count < NeuroEvolution.population) {
 				nextGeneration.addGenome (this.getGenomes () [i].Clone());
 			}
 		}
 
 		// Random Behaviour
-		for (int j = 0; j < Math.Round(randomBehaviour * population); j++) {
+		for (int j = 0; j < Math.Round(randomBehaviour * NeuroEvolution.population); j++) {
 			Genome randomGenome = this.genomes [0].Clone ();	
 			NeuralNetwork genomeNetwork = randomGenome.getNeuralNetwork ();
 			List<double> randomWeights = new List<double> ();
 
 			for (int k = 0; k < genomeNetwork.getWeightsList().Count; k++) {
-				randomWeights [k] = MathHelpers.randomClamped ();
+				randomWeights.Add(MathHelpers.randomClamped ());
 			}
-
+				
 			genomeNetwork.setNeuronsAndWeights (genomeNetwork.getNumberOfNeuronsPerLayer (), randomWeights);
 
-			if (nextGeneration.getGenomes ().Count < population) {
+			Debug.Log ("From random:" +  genomeNetwork.getLayers ().Count);
+
+			if (nextGeneration.getGenomes ().Count < NeuroEvolution.population) {
 				nextGeneration.getGenomes ().Add (randomGenome);
 			}
 		}
@@ -102,7 +106,7 @@ public class Generation {
 				Genome[] children = breed (genomes [i], genomes [max], nbChildren);
 				for (int j = 0; j < children.Length; j++) {
 					nextGeneration.addGenome (children [j]);
-					if (nextGeneration.getGenomes ().Count >= population) {
+					if (nextGeneration.getGenomes ().Count >= NeuroEvolution.population) {
 						return nextGeneration;
 					}
 				}

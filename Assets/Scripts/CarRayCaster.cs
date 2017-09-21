@@ -1,27 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityStandardAssets.Vehicles.Car;
+using UnityStandardAssets.CrossPlatformInput;
+using UnityEngine.Events;
 
 public class CarRayCaster : MonoBehaviour
 {
 
 	public GameObject car;
+
 	public Rigidbody carRigid;
 	int rayDistance = 5;
 	int rayDistanceFront = 20;
 	NeuralNetwork neu = new NeuralNetwork ();
+	NeuroEvolution neuro;
 	Genome currentGenome;
+	Generation currentGeneration;
+	List<Genome> currentGenomes = new List<Genome>();
+	int currentGenomeIndex = 0;
+	public 	CarController m_Car;
+	public float distanceTraveled = 0;
+	Vector3 lastPosition;
+	int generationNumber = 1;
 
-	void Start() {
-		Debug.Log ("Start");
+	private UnityAction listener;
 
-		NeuroEvolution neuro = new NeuroEvolution (4, new int[]{ 5, 10 }, 4);
+
+	void Awake() {
+		Debug.Log ("Awake");
+
+		neuro = new NeuroEvolution (4, new int[]{ 5, 10 }, 3);
 
 		Generation gen = neuro.nextGeneration ();
 
+		currentGeneration = gen;
+
 		List<Genome> genomes = gen.getGenomes ();
 
-		currentGenome = genomes[0];
+		currentGenomes = genomes;
+		currentGenome = genomes[currentGenomeIndex];
+
+		m_Car = GetComponent<CarController>();
 
 		/*
 		for (int i = 0; i < layers.Count; i++) {
@@ -37,9 +57,60 @@ public class CarRayCaster : MonoBehaviour
 		}
 		*/
 
+		listener = new UnityAction (gameOver);
+
+
+	}
+
+	void OnEnable() {
+		EventManager.StartListening ("gameover", listener);
 	}
 
 	void Update(){
+		distanceTraveled += Vector3.Distance (car.transform.position, lastPosition);
+		lastPosition = car.transform.position;
+
+		//Debug.Log ((int)distanceTraveled);
+	}
+
+	void gameOver() {
+		carRigid.velocity = new Vector3(0,0,0);
+
+		currentGenome.setScore ((int)distanceTraveled);
+		distanceTraveled = 0;
+
+		currentGenomeIndex++;
+
+		if (currentGenomeIndex == NeuroEvolution.population) {
+
+
+			Debug.Log ("Generation " + generationNumber);
+			currentGenomes.ForEach (((Genome genome) => {
+				Debug.Log ("Score: " + genome.getScore ());
+			}));
+
+			currentGeneration = neuro.nextGeneration ();
+			currentGenomes = currentGeneration.getGenomes ();
+
+			currentGenomes.ForEach (((Genome obj) => {
+				Debug.Log(obj.getNeuralNetwork().getLayers().Count);
+			}));
+
+			currentGenomeIndex = 0;
+
+			generationNumber++;
+		}
+
+		currentGenome = currentGenomes[currentGenomeIndex];
+
+		//neuro.networkScore (currentGenome.getNeuralNetwork(), (int)distanceTraveled);
+
+
+	}
+
+	private void FixedUpdate() {
+
+
 		RaycastHit hit;
 
 		Ray frontRay = new Ray (car.transform.position, transform.forward * 2 * rayDistance);
@@ -85,13 +156,29 @@ public class CarRayCaster : MonoBehaviour
 		double[] output = currentGenome.getNeuralNetwork().compute (new double[]{ leftDistance, frontDistance, rightDistance, currentSpeed});
 
 
-		Debug.Log ("Output 1: " + output[0] + " Output 2: " + output[1] + " Output 3: " + output[2] + " Output 4:" + output[3] );
+		//Debug.Log ("Output 1: " + output[0] + " Output 2: " + output[1] + " Output 3: " + output[2] + " Output 4:" + output[3] );
 
 		/*
 		for (int i = 0; i < output.Length; i++) {
 			//Debug.Log ("Output " + i + ": " + output[i]);
 		}*/
 
+		int output1 = output [0] > 0.5 ? 1 : 0; // speed
+		int output2 = output [1] > 0.5 ? 1 : 0; // left steer
+		int output3 = output [2] > 0.5 ? 1 : 0; // right steer
+
+		//Debug.Log ("Output 1: " + output[0] + " Output2: " + output[1] + " Output 3: " + output[2]);
+
+
+		//Debug.Log ();
+
+		//Debug.Log (m_Car.CurrentSteerAngle);
+
+		//Debug.Log (h);
+
+		m_Car.Move ((float)(output[1] - output[2]), (float)output[0], (float)output[0], 0);
+
+		//Debug .Log(m_Car.CurrentSteerAngle);
 	}
 
 }
