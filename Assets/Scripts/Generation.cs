@@ -8,9 +8,9 @@ public class Generation {
 	List<Genome> genomes = new List<Genome>();
 
 	private double mutationRange = 0.5;
-	private double mutationRate = 0.02;
+	private double mutationRate = 0.1;
 	private double elitism = 0.2;
-	private double randomBehaviour = 0.2;
+	private double randomBehaviour = 0.1;
 	private int nbChildren = 1;
 
 
