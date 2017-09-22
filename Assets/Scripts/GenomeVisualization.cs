@@ -43,27 +43,23 @@ public class GenomeVisualization : MonoBehaviour {
 				}
 
 				PaintNode (startingX + (150 * i), startingY - (30 * j) - (yMultiplier * 30), i);
-			}
-
-			for (int j = 0; j < neuronsPerLayer [i]; j++) {
-
-				if (i > 0 && neuronsPerLayer [i] < neuronsPerLayer [i - 1]) {
-					yMultiplier = (int)Mathf.Floor ((float)((neuronsPerLayer [i - 1] - neuronsPerLayer [i]) / 2));
-				}
 
 				if (i > 0) {
-					paintedWeights[i - 1].Add (new List<Image> ());
-					PaintLines (startingX + (150 * i), startingY - (30 * j) - (yMultiplier * 30), i);
+					List<Image> newLines = PaintLines (startingX + (150 * i), startingY - (30 * j) - (yMultiplier * 30), i);
+					paintedWeights[i - 1].Add (newLines);
 				}
+
 			}
+
+		
 		}
 	}
 
-	private void PaintLines(int x, int y, int layerIndex) {
+	private List<Image> PaintLines(int x, int y, int layerIndex) {
 
 		List<Image> previousLayerNodes = paintedNodes [layerIndex - 1];
 
-		int k = 0;
+		List<Image> paintedWeights = new List<Image>();
 
 		previousLayerNodes.ForEach ((Image image) => {
 
@@ -71,7 +67,7 @@ public class GenomeVisualization : MonoBehaviour {
 			Image NewImage = NewObj.AddComponent<Image>();
 			NewImage.sprite = lineSprite;
 
-			Color color = Color.yellow;
+			Color color = Color.white;
 			NewImage.color = color;
 
 			RectTransform rect = NewObj.GetComponent<RectTransform> ();
@@ -92,13 +88,14 @@ public class GenomeVisualization : MonoBehaviour {
 			Vector3 targetDir = pos - prevRect.transform.position;
 			float angle2 = Vector3.Angle(targetDir, Vector3.down);
 
-			rect.sizeDelta = new Vector2 (4, (int)targetDir.magnitude);
+			rect.sizeDelta = new Vector2 (6, (int)targetDir.magnitude);
 
 			rect.SetPositionAndRotation (pos, Quaternion.AngleAxis(angle2, Vector3.forward));
 
-			paintedWeights[layerIndex - 1][0].Add(NewImage);
-			k++;
+			paintedWeights.Add(NewImage);
 		});
+
+		return paintedWeights;
 
 	}
 
@@ -122,7 +119,7 @@ public class GenomeVisualization : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	private void FixedUpdate () {
+	void Update () {
 		Genome genome = gameController.GetCurrentGenome ();
 
 		int[] neuronsPerLayer = genome.getNeuralNetwork ().getNumberOfNeuronsPerLayer ();
@@ -131,8 +128,9 @@ public class GenomeVisualization : MonoBehaviour {
 			for (int neuronIndex = 0; neuronIndex < neuronsPerLayer [layerIndex]; neuronIndex++) {
 				Neuron neuron = genome.getNeuralNetwork ().GetNeuronInLayer (layerIndex, neuronIndex);
 				UpdateNodeValue (layerIndex, neuronIndex, neuron.getValue());
+
 				if (layerIndex > 0) {
-					UpdateWeightsValue (layerIndex - 1, neuronIndex, neuron.getWeights());
+					 UpdateWeightsValue (layerIndex - 1, neuronIndex, neuron.getWeights());
 				}
 
 			}
@@ -161,19 +159,27 @@ public class GenomeVisualization : MonoBehaviour {
 	private void UpdateWeightsValue(int layerIndex, int neuronIndex, double[] weights) {
 
 		int weightIndex = 0;
+
 		paintedWeights[layerIndex][neuronIndex].ForEach((Image image) => {
 			double weight = weights[weightIndex];
 
 			Color color = image.color;
 
 			if (weight > 0.5) {
-				color = Color.red;
+				color = Color.green;
+				color.a = (float)weight;
+			} else if (weight > 0) {
+				color = Color.white;
+				color.a = weight > 0.2 ? (float)weight : 0.2f;
 			} else {
-				color = Color.yellow;
+				color = Color.red;
+				color.a = -weight > 0.2 ? (float)-weight : 0.2f;
 			}
 
-			color.a = (float)weight;
+
+
 			image.color = color;
 		});
+
 	}
 }
