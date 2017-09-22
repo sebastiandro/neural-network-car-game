@@ -27,18 +27,6 @@ public class GameController : MonoBehaviour {
 	private Vector3 lastPosition;
 	private int currentGenomeIndex = 0;
 
-	public CarSensor leftSensor1;
-	public CarSensor leftSensor2;
-	public CarSensor leftSensor3;
-	public CarSensor leftSensor4;
-	public CarSensor leftSensor5;
-	public CarSensor frontSensor;
-	public CarSensor rightSensor1;
-	public CarSensor rightSensor2;
-	public CarSensor rightSensor3;
-	public CarSensor rightSensor4;
-	public CarSensor rightSensor5;
-
 	// Use this for initialization
 
 	void Awake () {
