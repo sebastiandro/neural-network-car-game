@@ -150,6 +150,10 @@ public class NeuralNetwork {
 		return layers;
 	}
 
+	public Neuron GetNeuronInLayer(int layerIndex, int nodeIndex) {
+		return layers [layerIndex].getNeurons () [nodeIndex];
+	}
+
 	public NeuralNetwork Clone(){
 		NeuralNetwork newNeuralNetwork = new NeuralNetwork ();
 

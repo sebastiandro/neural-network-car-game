@@ -1524,7 +1524,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Genome
+  m_Text: Genome 1
 --- !u!222 &874964817
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1544,7 +1544,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 437110, guid: 3ece98cef98dc3a48a6beb9c58333554, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -14.1
+      value: -14.4
       objectReference: {fileID: 0}
     - target: {fileID: 437110, guid: 3ece98cef98dc3a48a6beb9c58333554, type: 2}
       propertyPath: m_LocalPosition.z
@@ -2091,6 +2091,7 @@ MonoBehaviour:
   genomeText: {fileID: 874964816}
   generationText: {fileID: 944884703}
   carSensors: {fileID: 567399483}
+  genomeVisualization: {fileID: 0}
 --- !u!4 &1153460869
 Transform:
   m_ObjectHideFlags: 0
@@ -2479,6 +2480,7 @@ GameObject:
   - component: {fileID: 1612188650}
   - component: {fileID: 1612188649}
   - component: {fileID: 1612188648}
+  - component: {fileID: 1612188652}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2563,6 +2565,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1612188652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1612188647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4296124ec4757468c8018ddabac37851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameController: {fileID: 1153460868}
 --- !u!1 &1667134713
 GameObject:
   m_ObjectHideFlags: 0

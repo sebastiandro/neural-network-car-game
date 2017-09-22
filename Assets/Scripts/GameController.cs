@@ -29,14 +29,16 @@ public class GameController : MonoBehaviour {
 
 	public CarSensors carSensors;
 
+	public GenomeVisualization genomeVisualization;
+
 	// Use this for initialization
 
 	void Awake () {
-		neuro = new NeuroEvolution (11, new int[]{ 7 }, 2);
+		neuro = new NeuroEvolution (13, new int[]{ 8}, 2);
 
-		Generation gen = neuro.nextGeneration ();
-		currentGeneration = gen;
-		List<Genome> genomes = gen.getGenomes ();
+		Generation nextGeneration = neuro.nextGeneration ();
+		currentGeneration = nextGeneration;
+		List<Genome> genomes = nextGeneration.getGenomes ();
 		currentGenomes = genomes;
 		currentGenome = genomes[currentGenomeIndex];
 
@@ -44,6 +46,7 @@ public class GameController : MonoBehaviour {
 		generationText.text = "Generation 1";
 
 		listener = new UnityAction (GameOver);
+
 
 	}
 
@@ -65,19 +68,11 @@ public class GameController : MonoBehaviour {
 
 	void GameOver() {
 		carRigid.velocity = new Vector3(0,0,0);
-
 		currentGenome.setScore ((int)distanceTraveled);
 		distanceTraveled = 0;
-
 		currentGenomeIndex++;
 
-
 		if (currentGenomeIndex == NeuroEvolution.population) {
-
-			Debug.Log ("Generation " + generationNumber);
-			currentGenomes.ForEach (((Genome genome) => {
-				Debug.Log ("Score: " + genome.getScore ());
-			}));
 
 			currentGeneration = neuro.nextGeneration ();
 			currentGenomes = currentGeneration.getGenomes ();
@@ -85,15 +80,16 @@ public class GameController : MonoBehaviour {
 			currentGenomeIndex = 0;
 
 			generationNumber++;
-
-			EventManager.TriggerEvent ("new_generation");
-			Debug.Log ("New generation");
 		}
 
 		currentGenome = currentGenomes[currentGenomeIndex];
 
 		updateCanvasText ();
 
+	}
+
+	public Genome GetCurrentGenome(){
+		return currentGenome;
 	}
 
 	private void updateCanvasText() {

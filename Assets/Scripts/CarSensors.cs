@@ -26,7 +26,7 @@ public class CarSensors : MonoBehaviour {
 	Sensor leftSensor4;
 	Sensor leftSensor5;
 
-	double[] sensorOutput = new double[11];
+	double[] sensorOutput = new double[13];
 
 	public void Awake() {
 		car = gameObject;
