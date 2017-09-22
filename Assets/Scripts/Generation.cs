@@ -7,12 +7,6 @@ public class Generation {
 
 	List<Genome> genomes = new List<Genome>();
 
-	private double mutationRange = 0.5;
-	private double mutationRate = 0.1;
-	private double elitism = 0.2;
-	private double randomBehaviour = 0.1;
-	private int nbChildren = 1;
-
 
 	public Generation() {
 	}
@@ -72,8 +66,8 @@ public class Generation {
 
 			// Preform Mutations on random weights
 			for (int k = 0; k < g1Weights.Count; k++) {
-				if (MathHelpers.randomNumber() <= mutationRate) {
-					g1Weights [k] += MathHelpers.randomNumber () * mutationRange * 2 - mutationRange;
+				if (MathHelpers.randomNumber() <= NeuroEvolution.mutationRate) {
+					g1Weights [k] += MathHelpers.randomNumber () * NeuroEvolution.mutationRange * 2 - NeuroEvolution.mutationRange;
 				}
 			}
 
@@ -88,14 +82,14 @@ public class Generation {
 		Generation nextGeneration = new Generation ();
 
 		// Elitism decides the individuals that will stay alive
-		for (int i = 0; i < Math.Round(elitism * NeuroEvolution.population); i++) {
+		for (int i = 0; i < Math.Round(NeuroEvolution.elitism * NeuroEvolution.population); i++) {
 			if (nextGeneration.getGenomes ().Count < NeuroEvolution.population) {
 				nextGeneration.addGenome (this.getGenomesOrderdByScore () [i].Clone());
 			}
 		}
 
 		// Random Behaviour
-		for (int j = 0; j < Math.Round(randomBehaviour * NeuroEvolution.population); j++) {
+		for (int j = 0; j < Math.Round(NeuroEvolution.randomBehaviour * NeuroEvolution.population); j++) {
 			Genome randomGenome = this.genomes [0].Clone ();	
 			NeuralNetwork genomeNetwork = randomGenome.getNeuralNetwork ();
 			List<double> randomWeights = new List<double> ();
@@ -116,7 +110,7 @@ public class Generation {
 		int max = 0;
 		while (true) {
 			for (int i = 0; i < max; i++) {
-				Genome[] children = breed (genomes [i], genomes [max], nbChildren);
+				Genome[] children = breed (genomes [i], genomes [max], NeuroEvolution.nbChildren);
 				for (int j = 0; j < children.Length; j++) {
 					nextGeneration.addGenome (children [j]);
 					if (nextGeneration.getGenomes ().Count >= NeuroEvolution.population) {
@@ -129,8 +123,6 @@ public class Generation {
 				max = 0;
 			}
 		}
-
-		return nextGeneration;
 
 	}
 

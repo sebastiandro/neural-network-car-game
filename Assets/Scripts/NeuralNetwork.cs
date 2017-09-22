@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 
 public class NeuralNetwork {
 
@@ -77,7 +76,6 @@ public class NeuralNetwork {
 
 	public void setNeuronsAndWeights(int[] nbNeuronsPerLayer, List<double> weights){
 		int previousNeurons = 0;
-		int index = 0;
 		int indexWeights = 0;
 
 		layers = new List<Layer> ();
@@ -99,8 +97,6 @@ public class NeuralNetwork {
 
 			layers.Add (layer);
 		}
-
-		this.layers = layers;
 	}
 
 	public double[] compute(double[] inputs){

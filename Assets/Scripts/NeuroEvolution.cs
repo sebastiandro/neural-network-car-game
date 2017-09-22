@@ -10,6 +10,11 @@ public class NeuroEvolution
 	public static int outputs = 1;
 	public bool lowHistoric = false;
 	public int historic = 0;
+	public static double mutationRange = 0.5;
+	public static double mutationRate = 0.3;
+	public static double elitism = 0.2;
+	public static double randomBehaviour = 0.2;
+	public static int nbChildren = 1;
 
 
 	Generations generations = new Generations();

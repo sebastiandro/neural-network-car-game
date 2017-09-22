@@ -6,7 +6,6 @@ public class Generations
 {
 
 	List<Generation> generations = new List<Generation>();
-	Generation currentGeneration = new Generation();
 
 	public Generations () {}
 
