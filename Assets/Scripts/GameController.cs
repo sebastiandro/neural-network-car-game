@@ -27,6 +27,8 @@ public class GameController : MonoBehaviour {
 	private Vector3 lastPosition;
 	private int currentGenomeIndex = 0;
 
+	public CarSensors carSensors;
+
 	// Use this for initialization
 
 	void Awake () {
@@ -56,8 +58,9 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
+		double[] output = currentGenome.getNeuralNetwork ().compute (carSensors.getSensorOutput ());
 
-
+		carController.Move ((float)(output[1] * 7 - 3.5), (float)output[0], (float)output[0], 0);
 	}
 
 	void GameOver() {
@@ -95,6 +98,6 @@ public class GameController : MonoBehaviour {
 
 	private void updateCanvasText() {
 		genomeText.text = "Genome " + (currentGenomeIndex + 1);
-		generationText.text = "Generation " + currentGeneration;
+		generationText.text = "Generation " + generationNumber;
 	}
 }

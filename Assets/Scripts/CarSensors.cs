@@ -12,156 +12,56 @@ public class CarSensors : MonoBehaviour {
 
 	RaycastHit hit;
 
-	Ray frontRay;
+	Sensor frontSensor;
+	Sensor rightSensor0;
+	Sensor rightSensor1;
+	Sensor rightSensor2;
+	Sensor rightSensor3;
+	Sensor rightSensor4;
+	Sensor rightSensor5;
+	Sensor leftSensor0;
+	Sensor leftSensor1;
+	Sensor leftSensor2;
+	Sensor leftSensor3;
+	Sensor leftSensor4;
+	Sensor leftSensor5;
+
+	double[] sensorOutput = new double[11];
 
 	public void Awake() {
 		car = gameObject;
-		Ray frontRay = new Ray (car.transform.position, car.transform.forward * 2 * rayDistance);
+		frontSensor = new Sensor (car, 0);
+		rightSensor0= new Sensor (car, 90);
+		rightSensor1= new Sensor (car, 45);
+		rightSensor2 = new Sensor (car, 35);
+		rightSensor3 = new Sensor (car, 25);
+		rightSensor4 = new Sensor (car, 15);
+		rightSensor5 = new Sensor (car, 5);
+		leftSensor0 = new Sensor (car, -90);
+		leftSensor1 = new Sensor (car, -45);
+		leftSensor2 = new Sensor (car, -35);
+		leftSensor3 = new Sensor (car, -25);
+		leftSensor4 = new Sensor (car, -15);
+		leftSensor5 = new Sensor (car, -5);
 	}
 
 	private void FixedUpdate() {
-		RaycastHit hit;
+		sensorOutput[0] = frontSensor.getSignalStrength ();
+		sensorOutput[1] = rightSensor0.getSignalStrength ();
+		sensorOutput[2] = rightSensor1.getSignalStrength ();
+		sensorOutput[3] = rightSensor2.getSignalStrength ();
+		sensorOutput[4] = rightSensor3.getSignalStrength ();
+		sensorOutput[5] = rightSensor4.getSignalStrength ();
+		sensorOutput[6] = rightSensor5.getSignalStrength ();
+		sensorOutput[7] = leftSensor0.getSignalStrength ();
+		sensorOutput[8] = leftSensor1.getSignalStrength ();
+		sensorOutput[9] = leftSensor2.getSignalStrength ();
+		sensorOutput[10] = leftSensor3.getSignalStrength ();
+		sensorOutput[11] = leftSensor4.getSignalStrength ();
+		sensorOutput[12] = leftSensor5.getSignalStrength ();
+	}
 
-
-		frontRay.origin = car.transform.position;
-		frontRay.direction = (car.transform.forward * rayDistance);
-		Ray rightRay = new Ray (car.transform.position, Quaternion.Euler(0, 45, 0) * car.transform.forward * rayDistance);
-		Ray rightFrontRay = new Ray (car.transform.position, Quaternion.Euler(0, 35, 0) * car.transform.forward * rayDistance);
-		Ray rightFrontRay2 = new Ray (car.transform.position, Quaternion.Euler(0, 25, 0) * car.transform.forward * rayDistance);
-		Ray rightFrontRay3 = new Ray (car.transform.position, Quaternion.Euler(0, 15, 0) * car.transform.forward * rayDistance);
-		Ray rightFrontRay4 = new Ray (car.transform.position, Quaternion.Euler(0, 5, 0) * car.transform.forward * rayDistance);
-
-		Ray leftRay = new Ray (car.transform.position, Quaternion.Euler(0, -45, 0) * car.transform.forward * rayDistance);
-		Ray leftFrontRay = new Ray (car.transform.position, Quaternion.Euler(0, -35, 0) * car.transform.forward * rayDistance);
-		Ray leftFrontRay2 = new Ray (car.transform.position, Quaternion.Euler(0, -25, 0) * car.transform.forward * rayDistance);
-		Ray leftFrontRay3 = new Ray (car.transform.position, Quaternion.Euler(0, -15, 0) * car.transform.forward * rayDistance);
-		Ray leftFrontRay4 = new Ray (car.transform.position, Quaternion.Euler(0, -5, 0) * car.transform.forward * rayDistance);
-
-		double frontDistance = 0;
-
-		double leftDistance = 0;
-		double rightFrontDistance = 0;
-		double rightFrontDistance2 = 0;
-		double rightFrontDistance3 = 0;
-		double rightFrontDistance4 = 0;
-
-		double rightDistance = 0;
-		double leftFrontDistance = 0;
-		double leftFrontDistance2 = 0;
-		double leftFrontDistance3 = 0;
-		double leftFrontDistance4 = 0;
-
-		// Mark collision from front
-		if (Physics.Raycast(frontRay, out hit, rayDistance)) {
-			Debug.DrawRay(car.transform.position, frontRay.direction * rayDistance, Color.red);
-			//Debug.Log ("Front distance: " + hit.distance);
-
-			frontDistance = hit.distance / rayDistance;
-		} else {
-			Debug.DrawRay(car.transform.position, frontRay.direction * rayDistance, Color.green);
-		}
-
-		// Mark collision from right
-		if (Physics.Raycast(rightRay, out hit, rayDistance)) {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, 45, 0) * car.transform.forward * rayDistance, Color.red);
-			//Debug.Log ("Right distance: " + hit.distance);
-
-			rightDistance = hit.distance / rayDistance;
-		} else {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, 45, 0) * car.transform.forward * rayDistance, Color.green);
-		}
-
-		// Mark collision from right
-		if (Physics.Raycast(rightFrontRay, out hit, rayDistance)) {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, 35, 0) * car.transform.forward * rayDistance, Color.red);
-			//Debug.Log ("Right distance: " + hit.distance);
-
-			rightFrontDistance = hit.distance / rayDistance;
-		} else {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, 35, 0) * car.transform.forward * rayDistance, Color.green);
-		}
-
-
-
-		// Mark collision from right
-		if (Physics.Raycast(rightFrontRay2, out hit, rayDistance)) {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, 25, 0) * car.transform.forward * rayDistance, Color.red);
-			//Debug.Log ("Right distance: " + hit.distance);
-
-			rightFrontDistance2 = hit.distance / rayDistance;
-		} else {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, 25, 0) * car.transform.forward * rayDistance, Color.green);
-		}
-
-		// Mark collision from right
-		if (Physics.Raycast(rightFrontRay3, out hit, rayDistance)) {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, 15, 0) * car.transform.forward * rayDistance, Color.red);
-			//Debug.Log ("Right distance: " + hit.distance);
-
-			rightFrontDistance3 = hit.distance / rayDistance;
-		} else {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, 15, 0) * car.transform.forward * rayDistance, Color.green);
-		}
-
-		// Mark collision from right
-		if (Physics.Raycast(rightFrontRay4, out hit, rayDistance)) {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, 5, 0) * car.transform.forward * rayDistance, Color.red);
-			//Debug.Log ("Right distance: " + hit.distance);
-
-			rightFrontDistance4 = hit.distance / rayDistance;
-		} else {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, 5, 0) * car.transform.forward * rayDistance, Color.green);
-		}
-
-
-		// Mark collision from left
-		if (Physics.Raycast(leftRay, out hit, rayDistance)) {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, -45, 0) * car.transform.forward * rayDistance, Color.red);
-			//Debug.Log ("Left distance: " + hit.distance);
-			leftDistance = hit.distance / rayDistance;
-		} else {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, -45, 0) * car.transform.forward * rayDistance, Color.green);
-		}
-
-
-		// Mark collision from right
-		if (Physics.Raycast(leftFrontRay, out hit, rayDistance)) {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, -35, 0) * car.transform.forward * rayDistance, Color.red);
-			//Debug.Log ("Right distance: " + hit.distance);
-
-			leftFrontDistance = hit.distance / rayDistance;
-		} else {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, -35, 0) * car.transform.forward * rayDistance, Color.green);
-		}
-
-		// Mark collision from right
-		if (Physics.Raycast(leftFrontRay2, out hit, rayDistance)) {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, -25, 0) * car.transform.forward * rayDistance, Color.red);
-			//Debug.Log ("Right distance: " + hit.distance);
-
-			leftFrontDistance2 = hit.distance / rayDistance;
-		} else {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, -25, 0) * car.transform.forward * rayDistance, Color.green);
-		}
-
-		// Mark collision from right
-		if (Physics.Raycast(leftFrontRay3, out hit, rayDistance)) {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, -15, 0) * car.transform.forward * rayDistance, Color.red);
-			//Debug.Log ("Right distance: " + hit.distance);
-
-			leftFrontDistance3 = hit.distance / rayDistance;
-		} else {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, -15, 0) * car.transform.forward * rayDistance, Color.green);
-		}
-
-		// Mark collision from right
-		if (Physics.Raycast(leftFrontRay4, out hit, rayDistance)) {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, -5, 0) * car.transform.forward * rayDistance, Color.red);
-			//Debug.Log ("Right distance: " + hit.distance);
-
-			leftFrontDistance4 = hit.distance / rayDistance;
-		} else {
-			Debug.DrawRay(car.transform.position, Quaternion.Euler(0, -5, 0) * car.transform.forward * rayDistance, Color.green);
-		}
+	public double[] getSensorOutput() {
+		return sensorOutput;
 	}
 }
