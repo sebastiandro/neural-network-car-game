@@ -21,6 +21,8 @@ public class Generations
 
 			firstGeneration.addGenome (new Genome (nn));
 
+			firstGeneration.CalculateDiveristy ();
+
 		}
 
 		generations.Add (firstGeneration);
@@ -33,6 +35,8 @@ public class Generations
 		}
 
 		Generation nextGen = this.generations [this.generations.Count - 1].generateNextGeneration ();
+
+		nextGen.CalculateDiveristy ();
 
 		generations.Add (nextGen);
 

@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour {
 	public Text genomeText;
 	public Text generationText;
 	public Text bestFitnessText;
+	public Text diversityText;
 
 	private float distanceTraveled = 0;
 	private int generationNumber = 1;
@@ -47,6 +48,7 @@ public class GameController : MonoBehaviour {
 
 		genomeText.text = "Genome 1";
 		generationText.text = "Generation 1";
+		diversityText.text = "Diversity: " + currentGeneration.diversity;
 
 		listener = new UnityAction (GameOver);
 
@@ -104,5 +106,6 @@ public class GameController : MonoBehaviour {
 	private void updateCanvasText() {
 		genomeText.text = "Genome " + (currentGenomeIndex + 1);
 		generationText.text = "Generation " + generationNumber;
+		diversityText.text = "Diversity: " + currentGeneration.diversity;
 	}
 }

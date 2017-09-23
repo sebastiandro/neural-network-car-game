@@ -6,6 +6,7 @@ using System;
 public class Generation {
 
 	List<Genome> genomes = new List<Genome>();
+	public double diversity { get; set; }
 
 
 	public Generation() {
@@ -123,6 +124,45 @@ public class Generation {
 				max = 0;
 			}
 		}
+
+	}
+
+	public void CalculateDiveristy() {
+		List<List<double>> networkWeights = new List<List<double>> ();
+
+		genomes.ForEach ((Genome genome) => {
+			networkWeights.Add(genome.getNeuralNetwork().getWeightsList());
+		});
+
+		// For every weight in the first layer
+		List<double> stdDeviations = new List<double> ();
+		int layerCount = networkWeights.Count;
+		for (int i = 0; i < networkWeights[0].Count; i++) {
+			double sum = 0;
+
+			for (int j = 0; j < layerCount; j++) {
+				sum += networkWeights [j] [i];	
+			}
+
+			double average = (sum / layerCount);
+			double differenceSquared = 0;
+
+			for (int k = 0; k < layerCount; k++) {
+				differenceSquared += Math.Pow ((networkWeights [k] [i] - average), 2);
+			}
+
+			double stdDeviation = Math.Sqrt(differenceSquared / layerCount);
+
+			stdDeviations.Add (stdDeviation);
+		}
+
+		double totalAvg = 0;
+		double avg = 0;
+		stdDeviations.ForEach ((double deviation) => {
+			totalAvg += deviation;	
+		});
+
+		diversity = totalAvg / stdDeviations.Count;
 
 	}
 
