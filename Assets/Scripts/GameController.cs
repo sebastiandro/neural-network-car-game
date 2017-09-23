@@ -12,8 +12,10 @@ public class GameController : MonoBehaviour {
 	public Rigidbody carRigid;
 	public CarController carController;
 
+
 	public Text genomeText;
 	public Text generationText;
+	public Text bestFitnessText;
 
 	private float distanceTraveled = 0;
 	private int generationNumber = 1;
@@ -26,6 +28,7 @@ public class GameController : MonoBehaviour {
 	private List<Genome> currentGenomes = new List<Genome>();
 	private Vector3 lastPosition;
 	private int currentGenomeIndex = 0;
+	private int bestFitness = 0;
 
 	public CarSensors carSensors;
 
@@ -34,7 +37,7 @@ public class GameController : MonoBehaviour {
 	// Use this for initialization
 
 	void Awake () {
-		neuro = new NeuroEvolution (13, new int[]{ 8}, 2);
+		neuro = new NeuroEvolution (13, new int[]{8}, 2);
 
 		Generation nextGeneration = neuro.nextGeneration ();
 		currentGeneration = nextGeneration;
@@ -69,6 +72,12 @@ public class GameController : MonoBehaviour {
 	void GameOver() {
 		carRigid.velocity = new Vector3(0,0,0);
 		currentGenome.setScore ((int)distanceTraveled);
+
+		if (distanceTraveled > bestFitness) {
+			bestFitness = (int)distanceTraveled;
+			bestFitnessText.text = "Best Fitness: " + bestFitness;
+		}
+
 		distanceTraveled = 0;
 		currentGenomeIndex++;
 

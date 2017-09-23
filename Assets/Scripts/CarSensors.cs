@@ -30,19 +30,19 @@ public class CarSensors : MonoBehaviour {
 
 	public void Awake() {
 		car = gameObject;
-		frontSensor = new Sensor (car, 0);
-		rightSensor0= new Sensor (car, 90);
-		rightSensor1= new Sensor (car, 45);
-		rightSensor2 = new Sensor (car, 35);
-		rightSensor3 = new Sensor (car, 25);
-		rightSensor4 = new Sensor (car, 15);
-		rightSensor5 = new Sensor (car, 5);
-		leftSensor0 = new Sensor (car, -90);
-		leftSensor1 = new Sensor (car, -45);
-		leftSensor2 = new Sensor (car, -35);
-		leftSensor3 = new Sensor (car, -25);
-		leftSensor4 = new Sensor (car, -15);
-		leftSensor5 = new Sensor (car, -5);
+		frontSensor = new Sensor (car, -90);
+		rightSensor0= new Sensor (car, -75);
+		rightSensor1= new Sensor (car, -60);
+		rightSensor2 = new Sensor (car, -45);
+		rightSensor3 = new Sensor (car, -30);
+		rightSensor4 = new Sensor (car, -15);
+		rightSensor5 = new Sensor (car, 0);
+		leftSensor0 = new Sensor (car, 15);
+		leftSensor1 = new Sensor (car, 30);
+		leftSensor2 = new Sensor (car, 45);
+		leftSensor3 = new Sensor (car, 60);
+		leftSensor4 = new Sensor (car, 76);
+		leftSensor5 = new Sensor (car, 90);
 	}
 
 	private void FixedUpdate() {
