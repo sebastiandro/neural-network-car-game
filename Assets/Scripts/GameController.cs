@@ -12,11 +12,17 @@ public class GameController : MonoBehaviour {
 	public Rigidbody carRigid;
 	public CarController carController;
 
+	public double mutationRate = 0.3;
+	public double randomBehaviour = 0.2;
+	public double elitism = 0.2;
+
 
 	public Text genomeText;
 	public Text generationText;
 	public Text bestFitnessText;
 	public Text diversityText;
+	public Text mutationRateText;
+	public Text randomBehaviourText;
 
 	private float distanceTraveled = 0;
 	private int generationNumber = 1;
@@ -39,6 +45,10 @@ public class GameController : MonoBehaviour {
 
 	void Awake () {
 		neuro = new NeuroEvolution (13, new int[]{8}, 2);
+
+		NeuroEvolution.elitism = elitism;
+		NeuroEvolution.mutationRate = mutationRate;
+		NeuroEvolution.randomBehaviour = randomBehaviour;
 
 		Generation nextGeneration = neuro.nextGeneration ();
 		currentGeneration = nextGeneration;
@@ -66,6 +76,15 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
+
+
+		NeuroEvolution.elitism = elitism;
+		NeuroEvolution.mutationRate = mutationRate;
+		NeuroEvolution.randomBehaviour = randomBehaviour;
+
+		mutationRateText.text = "Mutation Rate: " + NeuroEvolution.mutationRate;
+		randomBehaviourText.text = "Random Behaviour: " + NeuroEvolution.randomBehaviour;
+
 		double[] output = currentGenome.getNeuralNetwork ().compute (carSensors.getSensorOutput ());
 
 		carController.Move ((float)(output[1] * 7 - 3.5), (float)output[0], (float)output[0], 0);

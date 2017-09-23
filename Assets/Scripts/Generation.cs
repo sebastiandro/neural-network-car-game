@@ -72,6 +72,8 @@ public class Generation {
 				}
 			}
 
+			g1Clone.getNeuralNetwork ().setNeuronsAndWeights (g1Clone.getNeuralNetwork ().getNumberOfNeuronsPerLayer(), g1Weights);
+
 			children [i] = g1Clone;
 		}
 
